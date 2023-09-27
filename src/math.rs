@@ -69,11 +69,12 @@ impl Vec2 {
         Vec2::new_fill(0.)
     }
 
+    /// rotates the vector by a given theta in radians
     pub fn rotate_rad(&self, theta: f64) -> Vec2 {
         // rotation matrix
-        // [ cos()   -sin() ] [ vx ]
-        // [ sin()   cos()  ] [ vy ] 
-        //   a^      b^
+        // [ cos(Θ)   -sin(Θ) ] [ vx ]
+        // [ sin(Θ)   cos(Θ)  ] [ vy ] 
+        //   a^       b^
         
         let (sin_theta, cos_theta) = theta.sin_cos();
 

@@ -14,6 +14,7 @@ mod rendering;
 mod states;
 mod drawing;
 mod math;
+mod color;
 
 const WIDTH:  u32 = 500;
 const HEIGHT: u32 = 500;
