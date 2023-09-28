@@ -9,7 +9,10 @@ pub trait VecMath {
     fn normalize(&self) -> Self;
 
     /// returns the distance between the vetor and another 
-    fn distance(&self, other: Self) -> f64;
+    fn distance(&self, other: &Self) -> f64;
+
+    /// linear interpolation of vectors
+    fn lerp(&self, other: &Self, t: f64) -> Self;
 }
 
 pub struct Vec2 {
@@ -21,6 +24,14 @@ impl Add for Vec2 {
     type Output = Vec2;
 
     fn add(self, other: Self) -> Self::Output {
+        &self + &other
+    }
+}
+
+impl Add<&Vec2> for &Vec2 {
+    type Output = Vec2;
+
+    fn add(self, other: &Vec2) -> Self::Output {
         Vec2 { 
             x: self.x + other.x, 
             y: self.y + other.y 
@@ -32,6 +43,14 @@ impl Sub for Vec2 {
     type Output = Vec2;
 
     fn sub(self, other: Self) -> Self::Output {
+        &self - &other
+    }
+}
+
+impl Sub<&Vec2> for &Vec2 {
+    type Output = Vec2;
+
+    fn sub(self, other: &Vec2) -> Self::Output {
         Vec2 { 
             x: self.x - other.x, 
             y: self.y - other.y 
@@ -98,23 +117,19 @@ impl VecMath for Vec2 {
         }
     }
 
-    fn distance(&self, other: Self) -> f64 {
+    fn distance(&self, other: &Self) -> f64 {
         f64::sqrt(
         (self.x - other.x) * (self.x - other.x) + (self.y - other.y) * (self.y - other.y)
         )
     }
-}
 
+    fn lerp(&self, other: &Self, t: f64) -> Self {
+        self + &((other - self) * t)
+    }
+}
 
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
     pub z: f64,
-}
-
-pub struct Vec4 {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64,
-    pub w: f64,
 }
