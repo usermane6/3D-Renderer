@@ -1,3 +1,5 @@
+use crate::color::Color;
+
 #[derive(Clone)]
 pub struct State {
     pub pixels: Vec<u8>,
@@ -22,13 +24,13 @@ impl State {
         Self { pixels, size }
     }
 
-    pub fn put_pixel_xy(&mut self, x: usize, y: usize, r: u8, g:u8, b:u8, a:u8 ) {
+    pub fn put_pixel_xy_raw(&mut self, x: usize, y: usize, r: u8, g:u8, b:u8, a:u8 ) {
         let id = ((self.size.0) * y) + x;
 
-        self.put_pixel_id(id, r, g, b, a);
+        self.put_pixel_id_raw(id, r, g, b, a);
     }
 
-    pub fn put_pixel_id(& mut self, id:usize, r: u8, g:u8, b:u8, a:u8) {
+    pub fn put_pixel_id_raw(&mut self, id:usize, r: u8, g:u8, b:u8, a:u8) {
         let id = id * 4;
         if let None = self.pixels.get(id) { panic!("Out of Bounds Error: Could not place pixel at ({id})") }
 
@@ -36,5 +38,13 @@ impl State {
         self.pixels[id + 1] = g;
         self.pixels[id + 2] = b;
         self.pixels[id + 3] = a;
+    }
+
+    pub fn put_pixel_id(&mut self, id:usize, c: &Color) {
+        self.put_pixel_id_raw(id, c.r, c.g, c.b, c.a);
+    }
+
+    pub fn put_pixel_xy(&mut self, x:usize, y: usize, c: &Color) {
+        self.put_pixel_xy_raw(x, y, c.r, c.g, c.b, c.a);
     }
 }

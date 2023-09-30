@@ -1,7 +1,7 @@
 use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::PhysicalSize;
 use winit::event::Event;
-use winit::event_loop::{ControlFlow, EventLoop, self};
+use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder, Window};
 use winit_input_helper::WinitInputHelper;
 
@@ -15,7 +15,7 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new(event_loop: &EventLoop<()>,w: u32, h: u32) -> Self {
+    pub fn new(event_loop: &EventLoop<()>, w: u32, h: u32) -> Self {
         let input = WinitInputHelper::new();
 
         let window = {
@@ -55,7 +55,7 @@ impl Renderer {
     pub fn update_buffer(&mut self, state: State) {
         //todo: make this not sloppy
         let zipped = self.pixels.frame_mut().iter_mut().zip(state.pixels);
-        for (frame_p, state_p) in zipped { *frame_p = state_p }
+        for (frame_p, state_p) in zipped { *frame_p = state_p; }
     }   
 
     pub fn render(&mut self) -> Result<(), Error> {
@@ -63,14 +63,20 @@ impl Renderer {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct RenderData {
-    total_updates: u32,
+    pub total_updates: u32,
 }
 
-pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &'static dyn Fn() -> State) {
+pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &'static dyn Fn(RenderData) -> State) {
+    let mut render_data = RenderData { 
+        total_updates: 0,
+    };
+
     event_loop.run(move |event, _, control_flow| {
         if let Event::RedrawRequested(_) = event {
-            renderer.update_buffer(next_state());
+            renderer.update_buffer(next_state(render_data.clone()));
+            render_data.total_updates += 1;
 
             if let Err(_err) = renderer.render() {
                 // error!("pixels.render() failed: {}", err);
