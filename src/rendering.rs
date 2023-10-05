@@ -91,7 +91,6 @@ pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &
                 return;
             }   
         }
-
         renderer.window.request_redraw();
     });
 }

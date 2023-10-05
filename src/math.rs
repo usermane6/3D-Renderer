@@ -15,6 +15,7 @@ pub trait VecMath {
     fn lerp(&self, other: &Self, t: f64) -> Self;
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Vec2 {
     pub x: f64,
     pub y: f64,
@@ -102,6 +103,13 @@ impl Vec2 {
             y: self.x * sin_theta + self.y * cos_theta
         }
     }
+
+    pub fn swap_xy(&self) -> Vec2 {
+        Vec2 { 
+            x: self.y, 
+            y: self.x 
+        }
+    }
 }
 
 impl VecMath for Vec2 { 
@@ -133,3 +141,6 @@ pub struct Vec3 {
     pub y: f64,
     pub z: f64,
 }
+
+pub type Tri2d = [Vec2; 3];
+pub type Tri3d = [Vec3; 3];

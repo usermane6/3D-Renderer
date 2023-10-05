@@ -1,5 +1,5 @@
 // #![allow(unused_imports)]
-use math::Vec2;
+use math::{Vec2, Tri2d};
 use rendering::RenderData;
 use states::State;
 use winit::event_loop::EventLoop;
@@ -16,13 +16,18 @@ const HEIGHT: u32 = 500;
 fn redraw(render_data: RenderData) -> states::State {
     let mut state = State::new_fill((WIDTH as usize, HEIGHT as usize), 0x00, 0x00, 0x00, 0xff);
 
-    let rads = ((render_data.total_updates)  as f64).to_radians();
-    // let rads:f64 = 1.;
-    let end = (Vec2::new(rads.sin(), rads.cos()) * 100.) + Vec2::new(250., 250.);
-    // println!("{end}");
-    drawing::line(&mut state, Vec2::new(250., 250.), end, &color::Color::BLUE());
+    let a = Vec2::new(100., 100.,);
+    let b = Vec2::new(200., 100.,);
+    let c = Vec2::new(200., 200.,);
+    let d = Vec2::new(100., 200.,);
 
-    state
+    let a_tri = [a, b, c];
+    let b_tri = [d, c, a];
+
+    drawing::tri_filled(&mut state, &a_tri, &color::Color::RED());
+    drawing::tri_filled(&mut state, &b_tri, &color::Color::RED());
+
+    state   
 }
 
 fn main() {
