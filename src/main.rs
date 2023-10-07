@@ -10,11 +10,11 @@ mod drawing;
 mod math;
 mod color;
 
-const WIDTH:  u32 = 500;
-const HEIGHT: u32 = 500;
+const WIDTH:  u32 = 1000;
+const HEIGHT: u32 = 1000;
 
 fn redraw(render_data: RenderData) -> states::State {
-    let mut state = State::new_fill((WIDTH as usize, HEIGHT as usize), 0x00, 0x00, 0x00, 0xff);
+    let mut state = State::new_fill((WIDTH as usize, HEIGHT as usize), color::Color::new(0x00, 0x00, 0x00));
 
     let a = Vec2::new(100., 100.,);
     let b = Vec2::new(200., 100.,);
@@ -24,8 +24,8 @@ fn redraw(render_data: RenderData) -> states::State {
     let a_tri = [a, b, c];
     let b_tri = [d, c, a];
 
-    drawing::tri_filled(&mut state, &a_tri, &color::Color::RED());
-    drawing::tri_filled(&mut state, &b_tri, &color::Color::RED());
+    drawing::tri_filled(&mut state, &a_tri, &color::Color::new_color( color::Colors::RED ));
+    drawing::tri_filled(&mut state, &b_tri, &color::Color::new_color( color::Colors::BLUE ));
 
     state   
 }

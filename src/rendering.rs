@@ -75,11 +75,11 @@ pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &
 
     event_loop.run(move |event, _, control_flow| {
         if let Event::RedrawRequested(_) = event {
+            // redraw has been requeated => get new state => update pixel buffer
             renderer.update_buffer(next_state(render_data.clone()));
             render_data.total_updates += 1;
 
             if let Err(_err) = renderer.render() {
-                // error!("pixels.render() failed: {}", err);
                 *control_flow = ControlFlow::Exit;
                 return;
             }
