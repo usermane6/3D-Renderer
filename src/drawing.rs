@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::color::Color;
 use crate::states::State;
-use crate::math::{Vec2, Tri2d};
+use crate::math::{vec2::Vec2, Tri2d};
 
 // TODO: have drawing functions return states, rather than modify them
 // TODO TODO: cleanup

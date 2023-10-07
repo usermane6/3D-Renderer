@@ -1,5 +1,5 @@
 // #![allow(unused_imports)]
-use math::{Vec2, Tri2d};
+use math::{vec2::Vec2, vec3::Vec3};
 use rendering::RenderData;
 use states::State;
 use winit::event_loop::EventLoop;
