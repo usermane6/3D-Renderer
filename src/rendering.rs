@@ -5,7 +5,7 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder, Window};
 use winit_input_helper::WinitInputHelper;
 
-use super::states::State;
+use super::state2d::State;
 
 pub struct Renderer {
     pixels: Pixels,
@@ -78,7 +78,8 @@ pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &
             // redraw has been requeated => get new state => update pixel buffer
             renderer.update_buffer(next_state(render_data.clone()));
             render_data.total_updates += 1;
-
+            
+            // panic!();
             if let Err(_err) = renderer.render() {
                 *control_flow = ControlFlow::Exit;
                 return;

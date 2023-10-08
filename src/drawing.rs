@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use crate::color::Color;
-use crate::states::State;
+use crate::state2d::State;
 use crate::math::{vec2::Vec2, Tri2d};
 
 // TODO: have drawing functions return states, rather than modify them
@@ -117,11 +117,8 @@ pub fn tri_wireframe(s: &mut State, tri: &Tri2d, color: &Color)
     line(s, tri[2], tri[0], color);
 }
 
-
-
 pub fn tri_filled(s: &mut State, tri: &Tri2d, color: &Color) {
     //! god strike me down i cant do this anymore
-    // todo: right side case
     let mut height_order = [tri[0], tri[1], tri[2]];
     
     // sort all points by height: highest -> lowest
@@ -139,6 +136,8 @@ pub fn tri_filled(s: &mut State, tri: &Tri2d, color: &Color) {
     let x_02 = x_values(height_order[0], height_order[2]);
 
     let is_mid_left =  height_order[1].x < height_order[2].x;
+
+    if height_order[2].y <= 0. {return;}
 
     if is_mid_left {
         for y in height_order[0].y as usize..(height_order[2].y as usize - 1) {

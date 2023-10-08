@@ -1,7 +1,11 @@
 use crate::math::vecmath::VecMath;
+use crate::math::vec2::Vec2;
+
 use std::fmt;
 use::std::ops::{Add, Sub, Mul};
 
+
+#[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,

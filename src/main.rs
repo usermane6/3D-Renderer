@@ -1,19 +1,24 @@
 // #![allow(unused_imports)]
 use math::{vec2::Vec2, vec3::Vec3};
+use object3d::Cube;
 use rendering::RenderData;
-use states::State;
+use state2d::State;
 use winit::event_loop::EventLoop;
 
 mod rendering;
-mod states;
+mod state2d;
 mod drawing;
 mod math;
 mod color;
+mod scene3d;
+mod object3d;
 
-const WIDTH:  u32 = 1000;
-const HEIGHT: u32 = 1000;
+const WIDTH:  u32 = 800;
+const HEIGHT: u32 = 800;
 
-fn redraw(render_data: RenderData) -> states::State {
+//TODO define tri2d/3d as struct with points and also a color
+
+fn redraw(render_data: RenderData) -> state2d::State {
     let mut state = State::new_fill((WIDTH as usize, HEIGHT as usize), color::Color::new(0x00, 0x00, 0x00));
 
     let a = Vec2::new(100., 100.,);
@@ -30,11 +35,23 @@ fn redraw(render_data: RenderData) -> states::State {
     state   
 }
 
+fn test_3d(_: RenderData) -> state2d::State {
+    // print!("fetching state");
+    let mut scene = scene3d::Scene::new(vec![], scene3d::Viewport::new(1., 1., 1.), (WIDTH as usize, HEIGHT as usize));
+
+    let mut cube = Cube::new();
+
+    scene.append_mesh(&mut cube.mesh);
+    
+    scene.get_state()
+}
+
 fn main() {
     // env::set_var("RUST_BACKTRACE", "1");
     let event_loop = EventLoop::new();
 
     let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
 
-    rendering::run_loop(renderer, event_loop, &redraw)    
+
+    rendering::run_loop(renderer, event_loop, &test_3d)    
 }
