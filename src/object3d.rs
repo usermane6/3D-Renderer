@@ -8,9 +8,6 @@ impl Cube {
     pub fn new() -> Self {
         //todo really messy change later
 
-        let s = 1.5;
-        let o = Vec3::new(0., 2., 10.);
-
         let mut v = [
             Vec3::new(1., 1., 1.),
             Vec3::new(-1., 1., 1.),
@@ -21,10 +18,6 @@ impl Cube {
             Vec3::new(-1., -1., -1.),
             Vec3::new(1., -1., -1.),
         ];
-
-        for vert in 0..v.len() {
-            v[vert] = (v[vert] * s) + o;
-        }
 
         Cube { 
             mesh: vec![
@@ -42,5 +35,37 @@ impl Cube {
                 [v[2], v[7], v[3]],
             ]
         }
+    }
+
+    pub fn scale(self, scalar: f64) -> Self {
+        let mut mesh = vec![];
+
+        for tri in self.mesh.iter() {
+            mesh.push(
+                [
+                    tri[0] * scalar,
+                    tri[1] * scalar,
+                    tri[2] * scalar,
+                ]
+            )
+        }
+
+        Cube { mesh }
+    }
+
+    pub fn translate(self, translation: Vec3) -> Self {
+        let mut mesh = vec![];
+
+        for tri in self.mesh.iter() {
+            mesh.push(
+                [
+                    tri[0] + translation,
+                    tri[1] + translation,
+                    tri[2] + translation,
+                ]
+            )
+        }
+
+        Cube { mesh }
     }
 }

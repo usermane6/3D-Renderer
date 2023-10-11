@@ -1,5 +1,5 @@
 // #![allow(unused_imports)]
-use math::{vec2::Vec2, vec3::Vec3};
+use math::{vec2::Vec2, vec3::Vec3, traits::VecMath};
 use object3d::Cube;
 use rendering::RenderData;
 use state2d::State;
@@ -35,19 +35,26 @@ fn redraw(render_data: RenderData) -> state2d::State {
     state   
 }
 
-fn test_3d(_: RenderData) -> state2d::State {
+fn test_3d(render_data: RenderData) -> state2d::State {
     // print!("fetching state");
     let mut scene = scene3d::Scene::new(vec![], scene3d::Viewport::new(1., 1., 1.), (WIDTH as usize, HEIGHT as usize));
+    let a = Vec3::new(1., 2., 10.);
+    let b = Vec3::new(-2., -2., 15.);
+    let t = (render_data.total_updates as f64 * 2.).to_radians().sin().abs() * 2.;
+    let translation = a.lerp(&b, t);
+    let translation1 = a.lerp(&b, 1. - t);
 
-    let mut cube = Cube::new();
+    let mut cube = Cube::new().translate(translation);
+    // let mut cube1 = Cube::new().translate(translation1);
 
     scene.append_mesh(&mut cube.mesh);
+    // scene.append_mesh(&mut cube1.mesh);
     
     scene.get_state()
 }
 
 fn main() {
-    // env::set_var("RUST_BACKTRACE", "1");
+    std::env::set_var("RUST_BACKTRACE", "1");
     let event_loop = EventLoop::new();
 
     let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);

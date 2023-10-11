@@ -1,4 +1,4 @@
-use crate::math::vecmath::VecMath;
+use crate::math::traits::VecMath;
 use std::fmt;
 use::std::ops::{Add, Sub, Mul};
 

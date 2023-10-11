@@ -1,4 +1,4 @@
-use crate::math::vecmath::VecMath;
+use crate::math::traits::VecMath;
 use crate::math::vec2::Vec2;
 
 use std::fmt;

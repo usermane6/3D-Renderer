@@ -16,7 +16,7 @@ pub fn bar(s: &mut State, y: &usize, start_x: &usize, end_x: &usize, color: &Col
 
 fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
     // swap a/b depending on which point is farther on the x axis
-    let (start, end) = if a.x > b.x { (b, a) } else { (a, b) };
+    let (mut start, mut end) = if a.x > b.x { (b, a) } else { (a, b) };
     
     let ys = y_values(start, end);
 
@@ -27,12 +27,7 @@ fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
 
 fn line_steep(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
     // swap a/b depending on which point is farther on the x axis
-    let (start, end) = if a.y > b.y { (b, a) } else { (a, b) };
-    
-    // xy must be swapped because iteration is in y
-    // for (y, x) in points_on_line(start.swap_xy(), end.swap_xy()) { 
-    //     s.put_pixel_xy(x, y, color) 
-    // }
+    let (mut start, mut end) = if a.y > b.y { (b, a) } else { (a, b) };
 
     let xs = x_values(start, end);
 

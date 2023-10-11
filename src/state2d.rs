@@ -28,6 +28,17 @@ impl State {
         State::new_fill_raw(size, c.r, c.g, c.b, c.a)
     }
 
+    pub fn put_pixel_id_raw(&mut self, id:usize, r: u8, g:u8, b:u8, a:u8) {
+        let id = id * 4; // each pixel has 4 values in the list
+        // if let None = self.pixels.get(id) { panic!("Out of Bounds Error: Could not place pixel at ({id})") }
+        if let None = self.pixels.get(id) { return }
+        
+        self.pixels[id + 0] = r;
+        self.pixels[id + 1] = g;
+        self.pixels[id + 2] = b;
+        self.pixels[id + 3] = a;
+    }
+
     pub fn put_pixel_xy_raw(&mut self, x: usize, y: usize, r: u8, g:u8, b:u8, a:u8 ) {
         if !self.is_in_bounds(x, y) { return }
 
@@ -35,18 +46,7 @@ impl State {
 
         self.put_pixel_id_raw(id, r, g, b, a);
     }
-
-    pub fn put_pixel_id_raw(&mut self, id:usize, r: u8, g:u8, b:u8, a:u8) {
-        let id = id * 4; // each pixel has 4 values in the list
-        // if let None = self.pixels.get(id) { panic!("Out of Bounds Error: Could not place pixel at ({id})") }
-        if let None = self.pixels.get(id) { return }
-
-        self.pixels[id + 0] = r;
-        self.pixels[id + 1] = g;
-        self.pixels[id + 2] = b;
-        self.pixels[id + 3] = a;
-    }
-
+    
     pub fn put_pixel_id(&mut self, id:usize, c: &Color) {
         self.put_pixel_id_raw(id, c.r, c.g, c.b, c.a);
     }
@@ -58,6 +58,7 @@ impl State {
     }
 
     pub fn is_in_bounds( &self, x: usize, y: usize ) -> bool {
+        //todo find a better way to do this, rather than checking bounds for every pixel
         if x > self.width()  { return false; }
         if y > self.height() { return false; }
 
