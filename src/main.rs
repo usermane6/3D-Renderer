@@ -15,7 +15,7 @@ mod object3d;
 
 const WIDTH:  u32 = 800;
 const HEIGHT: u32 = 800;
-
+//
 //TODO define tri2d/3d as struct with points and also a color
 
 fn redraw(render_data: RenderData) -> state2d::State {
