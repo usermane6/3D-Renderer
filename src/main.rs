@@ -1,5 +1,5 @@
 // #![allow(unused_imports)]
-use math::{vec2::Vec2, vec3::Vec3, traits::VecMath};
+use math::{vec2::Vec2, vec3::Vec3, traits::VecMath, mat4::Mat4};
 use object3d::Cube;
 use rendering::RenderData;
 use state2d::State;
@@ -55,10 +55,14 @@ fn test_3d(render_data: RenderData) -> state2d::State {
 
 fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
-    let event_loop = EventLoop::new();
+    // let event_loop = EventLoop::new();
 
-    let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
+    // let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
 
+    // rendering::run_loop(renderer, event_loop, &test_3d)    
 
-    rendering::run_loop(renderer, event_loop, &test_3d)    
+    let a = Mat4::scale(4.);
+    let b = Mat4::scale(2.);
+
+    println!("{:?}", a * b);
 }
