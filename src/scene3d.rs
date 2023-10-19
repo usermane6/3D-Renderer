@@ -1,4 +1,4 @@
-use crate::{math::{Tri3d, vec3::Vec3, Tri2d, vec2::Vec2}, state2d::State, color::{Color, Colors}, drawing};
+use crate::{math::{Tri3d, vec3::Vec3, Tri2d, vec2::Vec2, color::{Color, Colors}}, state2d::State, drawing};
 
 /// plane in 3d space that all points are projected onto for rendering
 pub struct Viewport {
@@ -31,6 +31,14 @@ pub struct Scene {
 impl Scene {
     pub fn new(mesh: Vec<Tri3d>, viewport: Viewport, state_size: (usize, usize)) -> Self {
         Scene { mesh, viewport, state_size }
+    }
+
+    pub fn new_empty(state_size: (usize, usize)) -> Self {
+        Scene { 
+            viewport: Viewport::new(1., 1., 1.), 
+            state_size: state_size, 
+            mesh: vec![] 
+        }
     }
 
     pub fn get_state(&self) -> State{

@@ -1,6 +1,4 @@
-use std::collections::HashSet;
-
-use crate::color::Color;
+use crate::math::color::Color;
 use crate::state2d::State;
 use crate::math::{vec2::Vec2, Tri2d};
 
@@ -13,63 +11,6 @@ pub fn bar(s: &mut State, y: &usize, start_x: &usize, end_x: &usize, color: &Col
         s.put_pixel_id(id, &color)
     }
 }
-
-fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
-    // swap a/b depending on which point is farther on the x axis
-    let (mut start, mut end) = if a.x > b.x { (b, a) } else { (a, b) };
-    
-    let ys = y_values(start, end);
-
-    for x in start.x as usize..end.x as usize {
-        s.put_pixel_xy(x, ys[x - start.x as usize], color)
-    }
-}
-
-fn line_steep(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
-    // swap a/b depending on which point is farther on the x axis
-    let (mut start, mut end) = if a.y > b.y { (b, a) } else { (a, b) };
-
-    let xs = x_values(start, end);
-
-    for y in start.y as usize..end.y as usize {
-        s.put_pixel_xy(xs[y - start.y as usize], y, color)
-    }
-}
-
-/// Returns the pixel coords of all points on a line
-///- start and end params MUST be in the correct order
-///- the state must have have the lesser x value
-// fn points_on_line(start: Vec2, end: Vec2) -> Vec<(usize, usize)>{
-//     let mut points = vec![];
-
-//     let slope = (start.y - end.y) / (start.x - end.x);
-//     let mut x = start.x;
-    
-//     for point_x in start.x as usize..end.x as usize {
-//         let point_y = (slope * (point_x as f64 - start.x) + start.y) as usize;
-
-//         points.push( (point_x, point_y) );
-//     }
-
-//     points
-// }
-
-// fn points_with_xy_swap(start: Vec2, end: Vec2) -> Vec<(usize, usize)> {
-//     let mut endpoints = [ start, end ];
-
-//     if (start.x - end.x).abs() > (start.y - end.y).abs() {
-//         if start.x > end.x { endpoints.swap(0, 1); };
-
-//         return points_on_line(endpoints[0], endpoints[1])
-//     } else {
-//         if start.y > end.y { endpoints.swap(0, 1); };
-
-//         return points_on_line(endpoints[0].swap_xy(), endpoints[1].swap_xy())
-//             .into_iter()
-//             .map(|(y, x)| (x, y))
-//             .collect()
-//     }
-// }
 
 /// interpolate function from this
 /// https://gabrielgambetta.com/computer-graphics-from-scratch/06-lines.html
@@ -95,6 +36,28 @@ fn x_values(start: Vec2, end: Vec2) -> Vec<usize> {
     y_values(start.swap_xy(), end.swap_xy())
 }
 
+fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
+    // swap a/b depending on which point is farther on the x axis
+    let (mut start, mut end) = if a.x > b.x { (b, a) } else { (a, b) };
+    
+    let ys = y_values(start, end);
+
+    for x in start.x as usize..end.x as usize {
+        s.put_pixel_xy(x, ys[x - start.x as usize], color)
+    }
+}
+
+fn line_steep(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
+    // swap a/b depending on which point is farther on the x axis
+    let (mut start, mut end) = if a.y > b.y { (b, a) } else { (a, b) };
+
+    let xs = x_values(start, end);
+
+    for y in start.y as usize..end.y as usize {
+        s.put_pixel_xy(xs[y - start.y as usize], y, color)
+    }
+}
+
 /// draws a line to the screen from start to end
 ///- a and b can be in any order
 pub fn line(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
@@ -104,6 +67,7 @@ pub fn line(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
         line_steep(s, a, b, color);
     }
 }
+
 
 pub fn tri_wireframe(s: &mut State, tri: &Tri2d, color: &Color) 
 {

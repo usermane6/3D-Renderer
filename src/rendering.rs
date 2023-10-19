@@ -5,10 +5,14 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder, Window};
 use winit_input_helper::WinitInputHelper;
 
+use crate::math::Tri3d;
+use crate::scene3d::Scene;
+
 use super::state2d::State;
 
 pub struct Renderer {
     pixels: Pixels,
+    scene: Scene,
 
     window: Window,
     input: WinitInputHelper,
@@ -41,9 +45,12 @@ impl Renderer {
             Pixels::new(w, h, surface_texture)
         };
 
+        let scene = Scene::new_empty((w as usize, h as usize));
+
         if let Ok(pixels) = pixels_result {
             Self {
                 pixels,
+                scene,
                 window,
                 input,
             }
@@ -55,7 +62,10 @@ impl Renderer {
     pub fn update_buffer(&mut self, state: State) {
         //todo: make this not sloppy
         let zipped = self.pixels.frame_mut().iter_mut().zip(state.pixels);
-        for (frame_p, state_p) in zipped { *frame_p = state_p; }
+        for (frame_p, state_p) in zipped { 
+            if *frame_p == state_p {continue;}
+            *frame_p = state_p; 
+        }
     }   
 
     pub fn render(&mut self) -> Result<(), Error> {
@@ -68,7 +78,7 @@ pub struct RenderData {
     pub total_updates: u32,
 }
 
-pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &'static dyn Fn(RenderData) -> State) {
+pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, redraw: &'static dyn Fn(RenderData) -> State) {
     let mut render_data = RenderData { 
         total_updates: 0,
     };
@@ -76,7 +86,7 @@ pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, next_state: &
     event_loop.run(move |event, _, control_flow| {
         if let Event::RedrawRequested(_) = event {
             // redraw has been requeated => get new state => update pixel buffer
-            renderer.update_buffer(next_state(render_data.clone()));
+            renderer.update_buffer(redraw(render_data.clone()));
             render_data.total_updates += 1;
             
             // panic!();

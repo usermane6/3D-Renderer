@@ -9,14 +9,14 @@ impl Cube {
         //todo really messy change later
 
         let mut v = [
-            Vec3::new(1., 1., 1.),
-            Vec3::new(-1., 1., 1.),
+            Vec3::new(1.,  1.,  1.),
+            Vec3::new(-1., 1.,  1.),
             Vec3::new(-1., -1., 1.),
-            Vec3::new(1., -1., 1.),
-            Vec3::new(1., 1., -1.),
-            Vec3::new(-1., 1., -1.),
+            Vec3::new(1.,  -1., 1.),
+            Vec3::new(1.,  1.,  -1.),
+            Vec3::new(-1., 1.,  -1.),
             Vec3::new(-1., -1., -1.),
-            Vec3::new(1., -1., -1.),
+            Vec3::new(1.,  -1., -1.),
         ];
 
         Cube { 

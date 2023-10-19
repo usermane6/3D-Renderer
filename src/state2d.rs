@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::math::color::Color;
 
 #[derive(Clone)]
 pub struct State {
