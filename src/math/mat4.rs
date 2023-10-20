@@ -26,13 +26,14 @@ impl Mul for Mat4 {
     fn mul(self, other: Self) -> Self::Output {
         let mut vals = [0.; 16];
 
-        for i in 0usize..4usize {
-            for j in 0usize..4usize {
+        for row in 0usize..4usize {      // row
+            for col in 0usize..4usize {  // col
                 
-                let id = (4 * i) + j;
+                let id = (4 * row) + col;
             
                 for k in 0..4 {
-                    vals[id] += self.vals[(i * 4) + k] * other.vals[j + (k * 4)];
+                    // iterate through the rows of [a] and the columns of [b]
+                    vals[id] += self.vals[(row * 4) + k] * other.vals[col + (k * 4)];
                 }
             }
         }
@@ -80,6 +81,32 @@ impl Mat4 {
                  0.,  1.,   0.,  0.,
                 sin,  0.,  cos,  0.,
                  0.,  0.,   0.,  1.,
+            ]
+        }
+    }
+
+    /// d is the distance from the 
+    pub fn projection(d: f64) -> Self {
+        Mat4 { 
+            vals: [
+                d,   0.,  0.,  0., 
+                0.,  d,   0.,  0., 
+                0.,  0.,  1.,  0., 
+                0.,  0.,  0.,  0., 
+            ]
+        }
+    }
+
+    /// takes the projection and places it on the canvas, returns 2d homogeneous coords, with a zero in the w position
+    ///- v_w and v_h are viewport width / height
+    ///- s_w and s_h are screen width / height
+    pub fn onto_2d(v_w: f64, v_h: f64, s_w: f64, s_h: f64) -> Self {
+        Mat4 { 
+            vals: [
+                s_w / v_w,   0.,          0.,          0., 
+                0.,          s_h / v_h,   0.,          0., 
+                0.,          0.,          1.,          0., 
+                0.,          0.,          0.,          0., 
             ]
         }
     }

@@ -1,6 +1,6 @@
 // #![allow(unused_imports)]
 use math::{vec2::Vec2, vec3::Vec3, traits::VecMath, mat4::Mat4};
-use object3d::Cube;
+// use object3d::Cube;
 use rendering::RenderData;
 use state2d::State;
 use winit::event_loop::EventLoop;

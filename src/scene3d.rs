@@ -1,4 +1,4 @@
-use crate::{math::{Tri3d, vec3::Vec3, Tri2d, vec2::Vec2, color::{Color, Colors}}, state2d::State, drawing};
+use crate::{math::{tri3d::Tri3d, vec3::Vec3, Tri2d, vec2::Vec2, color::{Color, Colors}, mat4::Mat4}, state2d::State, drawing};
 
 /// plane in 3d space that all points are projected onto for rendering
 pub struct Viewport {
@@ -19,9 +19,12 @@ impl Viewport {
             z: self.d
         }
     }
+
+    pub fn projection(self) -> Mat4 {
+        Mat4::projection(self.d)
+    }
 }
 
-// TODO: connect this more heavily to Renderer class to take advantage of state builder
 pub struct Scene {
     viewport: Viewport,
     state_size: (usize, usize),
@@ -58,10 +61,10 @@ impl Scene {
     fn project_mesh(&self) -> Vec<Tri2d> {
         let mut projected_tris = vec![];
 
-        for [a, b, c] in self.mesh.iter() {
+        for tri in self.mesh.iter() {
             projected_tris.push([
-                self.project_onto_2d(a),
-                self.project_onto_2d(b),
+                self.project_onto_2d(tri[0]),
+                self.project_onto_2d(tri[1]),
                 self.project_onto_2d(c),
             ])
         }

@@ -8,6 +8,7 @@ use super::vec3::Vec3;
 // // TODO add from trait from Vec3
 
 // used for homogeneous coordinates in 3d space
+#[derive(Debug, Clone, Copy)]
 pub struct Vec4 {
     pub x: f64,
     pub y: f64,
