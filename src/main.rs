@@ -28,15 +28,4 @@ fn main() {
     // let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
 
     // rendering::run_loop(renderer, event_loop, &redraw)    
-
-    let rotation = Mat4::rotation_rads( std::f64::consts::FRAC_PI_4 );
-
-    let a = Vec4::new(10., 0., 0., 1.);
-    let b = rotation * a;
-    let c = rotation * b;
-    let d = rotation * rotation * a;
-
-    println!("[r] * {a} -> [r] * {b} -> {c}");
-    println!("[r][r] * {a} -> {d}");
-
 }

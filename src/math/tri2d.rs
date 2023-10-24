@@ -4,7 +4,7 @@ use super::{vec2::Vec2, color::Color};
 #[derive(Debug, Clone, Copy)]
 pub struct Tri2d {
     points: [Vec2; 3],
-    color: Color
+    pub color: Color
 }
 
 impl Tri2d {

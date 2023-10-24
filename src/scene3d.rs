@@ -80,7 +80,7 @@ impl Scene {
         let mut s = State::new_fill(self.state_size, Color::gray(0x00));
 
         for tri in projected_mesh {
-            drawing::tri_wireframe(&mut s, &tri, &Color::gray(0xff));
+            drawing::tri_wireframe(&mut s, &tri, &tri.color);
         }
         
         State::new_fill(self.state_size, Color::gray(0xff))
