@@ -1,6 +1,6 @@
 use crate::math::color::Color;
 use crate::state2d::State;
-use crate::math::{vec2::Vec2, Tri2d};
+use crate::math::{vec2::Vec2, tri2d::Tri2d};
 
 // TODO: have drawing functions return states, rather than modify them
 // TODO TODO: cleanup

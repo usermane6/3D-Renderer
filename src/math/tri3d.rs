@@ -1,8 +1,7 @@
 use std::ops::Index;
+use super::{vec2::Vec2, vec4::Vec4, color::Color, mat4::Mat4, tri2d::Tri2d};
 
-use super::{vec4::Vec4, color::Color, mat4::Mat4};
-
-/// each point on the triangle is a 
+/// each point on the triangle is a homogeneous coordinate 
 #[derive(Debug, Clone, Copy)]
 pub struct Tri3d {
     points: [Vec4; 3],
@@ -10,6 +9,10 @@ pub struct Tri3d {
 }
 
 impl Tri3d {
+    pub fn new(points: [Vec4; 3], color: Color) -> Self {
+        Tri3d { points, color }
+    }
+
     pub fn apply_transform(self, t: Mat4) -> Tri3d {
         let mut points = [Vec4::zero(); 3];
 
@@ -18,6 +21,17 @@ impl Tri3d {
         }
 
         Tri3d { points, color: self.color }
+    }
+}
+
+impl Into<Tri2d> for Tri3d {
+    fn into(self) -> Tri2d {
+        let projected_points: [Vec2; 3] = [
+            self[0].into(),
+            self[1].into(),
+            self[2].into()
+        ];
+        Tri2d::new(projected_points, self.color)
     }
 }
 

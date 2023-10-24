@@ -5,7 +5,7 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder, Window};
 use winit_input_helper::WinitInputHelper;
 
-use crate::math::Tri3d;
+use crate::math::tri3d::Tri3d;
 use crate::scene3d::Scene;
 
 use super::state2d::State;

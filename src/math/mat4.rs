@@ -20,6 +20,14 @@ impl Mul<&Vec4> for Mat4 {
     }
 }
 
+impl Mul<Vec4> for Mat4 {
+    type Output = Vec4;
+
+    fn mul(self, a: Vec4) -> Self::Output {
+        self * &a
+    }
+}
+
 impl Mul for Mat4 {
     type Output = Mat4;
     /// [a][b] = [c]
@@ -48,7 +56,7 @@ impl Mat4 {
     }  
 
     /// translation by a given vector
-    pub fn translaion(a: Vec4) -> Self {
+    pub fn translation(a: Vec4) -> Self {
         Mat4 {
             vals: [
                 1.,  0.,  0.,  a.x,

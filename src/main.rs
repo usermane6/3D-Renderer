@@ -1,5 +1,5 @@
 // #![allow(unused_imports)]
-use math::{vec2::Vec2, vec3::Vec3, traits::VecMath, mat4::Mat4};
+use math::{vec2::Vec2, vec3::Vec3, traits::VecMath, mat4::Mat4, vec4::Vec4};
 // use object3d::Cube;
 use rendering::RenderData;
 use state2d::State;
@@ -23,9 +23,20 @@ fn redraw(render_data: RenderData) -> state2d::State {
 
 fn main() {
     // std::env::set_var("RUST_BACKTRACE", "1");
-    let event_loop = EventLoop::new();
+    // let event_loop = EventLoop::new();
 
-    let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
+    // let renderer = rendering::Renderer::new(&event_loop, WIDTH, HEIGHT);
 
-    rendering::run_loop(renderer, event_loop, &redraw)    
+    // rendering::run_loop(renderer, event_loop, &redraw)    
+
+    let rotation = Mat4::rotation_rads( std::f64::consts::FRAC_PI_4 );
+
+    let a = Vec4::new(10., 0., 0., 1.);
+    let b = rotation * a;
+    let c = rotation * b;
+    let d = rotation * rotation * a;
+
+    println!("[r] * {a} -> [r] * {b} -> {c}");
+    println!("[r][r] * {a} -> {d}");
+
 }

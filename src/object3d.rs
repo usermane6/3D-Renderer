@@ -1,6 +1,7 @@
-use crate::math::tri3d::Tri3d;
+use crate::math::{tri3d::Tri3d, transform3d::Transform3d, mat4::Mat4};
 
-struct Object3d {
-    key: u32,
-    mesh: Vec<Tri3d>,
+pub struct Object3d {
+    pub key: u32,
+    pub transform: Transform3d,
+    pub mesh: Vec<Tri3d>,
 }

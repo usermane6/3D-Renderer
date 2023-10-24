@@ -91,6 +91,12 @@ impl From<Vec3> for Vec4 {
     }
 }
 
+impl Into<Vec2> for Vec4 {
+    fn into(self) -> Vec2 {
+        Vec2::new(self.x, self.y)
+    }
+}
+
 impl fmt::Display for Vec4 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "⟨{}, {}, {}, {}⟩", self.x, self.y, self.z, self.w)
