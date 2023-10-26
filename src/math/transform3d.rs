@@ -1,9 +1,10 @@
 use super::{vec4::Vec4, mat4::Mat4};
 
+#[derive(Debug, Clone, Copy)]
 pub struct Transform3d {
-    rotation: f64,
-    scale: f64,
-    translation: Vec4,
+    pub rotation: f64,
+    pub scale: f64,
+    pub translation: Vec4,
 }
 
 impl Transform3d {

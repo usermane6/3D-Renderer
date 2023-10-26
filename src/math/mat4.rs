@@ -1,3 +1,4 @@
+use std::fmt;
 use::std::ops::{Add, Sub, Mul};
 use super::vec4::Vec4;
 use super::vec3::Vec3;
@@ -47,6 +48,35 @@ impl Mul for Mat4 {
         }
 
         Mat4::new(vals)
+    }
+}
+
+impl fmt::Display for Mat4 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+         // formatting of matrix into strings so they can be printed to the console
+
+        let mut final_string = String::new();
+        for y in 0..4 {
+            for x in 0..4 {
+                let mut val = self.get(x, y).to_string();
+                let mut gap = "      ".to_string();
+
+                if val.len() > gap.len() - 1 { // minus 1 so that there is a space between numbers, even at max length
+                    val.replace_range(5..val.len(), ""); // truncate numbers, so the don't upset alignments
+                }
+
+
+                gap.replace_range(0..val.len(), ""); // adjust gap size between #s so #s are aligned
+                
+                final_string.push_str(gap.as_str());
+                final_string.push_str(val.as_str());
+
+            }
+
+            final_string.push_str("\n")
+        }
+
+        write!(f, "{}", final_string)
     }
 }
 
@@ -100,7 +130,7 @@ impl Mat4 {
                 d,   0.,  0.,  0., 
                 0.,  d,   0.,  0., 
                 0.,  0.,  1.,  0., 
-                0.,  0.,  0.,  0., 
+                0.,  0.,  0.,  1., 
             ]
         }
     }
@@ -114,8 +144,26 @@ impl Mat4 {
                 s_w / v_w,   0.,          0.,          0., 
                 0.,          s_h / v_h,   0.,          0., 
                 0.,          0.,          1.,          0., 
-                0.,          0.,          0.,          0., 
+                0.,          0.,          0.,          1., 
             ]
         }
+    }
+
+    /// Previous transformations will have the "center" of the projection be one of the corners
+    /// this adjusts points to fix that
+    pub fn fix_to_center(s_w: f64, s_h: f64) -> Self {
+        Mat4 { 
+            vals: [
+                1.,  0.,  0.,  s_w / 2., 
+                0.,  1.,  0.,  s_h / 2., 
+                0.,  0.,  1.,  0., 
+                0.,  0.,  0.,  1., 
+            ]
+        }
+    }
+
+    pub fn get(&self, x: usize, y: usize) -> f64 {
+        let id = 4 * y + x;
+        self.vals[id]
     }
 }

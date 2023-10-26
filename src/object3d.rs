@@ -1,5 +1,6 @@
 use crate::math::{tri3d::Tri3d, transform3d::{Transform3d, self}, mat4::Mat4, vec4::Vec4, color::{Color, Colors}};
 
+#[derive(Debug, Clone)]
 pub struct Object3d {
     pub key: u32,
     pub transform: Transform3d,

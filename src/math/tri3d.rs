@@ -5,7 +5,7 @@ use super::{vec2::Vec2, vec4::Vec4, color::Color, mat4::Mat4, tri2d::Tri2d};
 #[derive(Debug, Clone, Copy)]
 pub struct Tri3d {
     points: [Vec4; 3],
-    color: Color
+    pub color: Color
 }
 
 impl Tri3d {

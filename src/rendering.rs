@@ -12,7 +12,7 @@ use super::state2d::State;
 
 pub struct Renderer {
     pixels: Pixels,
-    scene: Scene,
+    pub(crate) scene: Scene,
 
     window: Window,
     input: WinitInputHelper,
@@ -78,15 +78,22 @@ pub struct RenderData {
     pub total_updates: u32,
 }
 
-pub fn run_loop(mut renderer: Renderer, event_loop: EventLoop<()>, redraw: &'static dyn Fn(RenderData) -> State) {
+pub fn run_loop<'a, F, G>(mut renderer: Renderer, event_loop: EventLoop<()>, on_start: F, update: G) 
+    where 
+    F: Fn(&mut Scene) + 'static,
+    G: Fn(&mut Scene) + 'static 
+{
     let mut render_data = RenderData { 
         total_updates: 0,
     };
 
+    on_start(&mut renderer.scene);
+
     event_loop.run(move |event, _, control_flow| {
         if let Event::RedrawRequested(_) = event {
             // redraw has been requeated => get new state => update pixel buffer
-            renderer.update_buffer(redraw(render_data.clone()));
+            update(&mut renderer.scene);
+            renderer.update_buffer(renderer.scene.get_state());
             render_data.total_updates += 1;
             
             // panic!();

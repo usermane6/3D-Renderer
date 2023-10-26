@@ -93,7 +93,8 @@ impl From<Vec3> for Vec4 {
 
 impl Into<Vec2> for Vec4 {
     fn into(self) -> Vec2 {
-        Vec2::new(self.x, self.y)
+        // when decreasing the dim of homogeneous coords you need to account for the z and w disappearing
+        Vec2::new(self.x, self.y) * ( 1. / self.z ) * ( 1. / self.w)
     }
 }
 
