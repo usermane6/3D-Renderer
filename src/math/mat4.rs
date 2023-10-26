@@ -109,16 +109,42 @@ impl Mat4 {
         }
     }
 
-    /// rotation around the y axis
-    pub fn rotation_rads(theta: f64) -> Self {
+    pub fn rotation_x_rads(theta: f64) -> Self {
         let (sin, cos) = theta.sin_cos();
         
         Mat4 {
             vals: [
-                cos,  0., -sin,  0.,
-                 0.,  1.,   0.,  0.,
-                sin,  0.,  cos,  0.,
-                 0.,  0.,   0.,  1.,
+                1.,  0.,   0.,   0.,
+                0.,  cos, -sin,  0.,
+                0.,  sin,  cos,  0.,
+                0.,  0.,   0.,   1.,
+            ]
+        }
+    }
+
+    /// rotation around the y axis
+    pub fn rotation_y_rads(theta: f64) -> Self {
+        let (sin, cos) = theta.sin_cos();
+        
+        Mat4 {
+            vals: [
+                cos,   0., -sin,   0.,
+                 0.,   1.,   0.,   0.,
+                sin,   0.,  cos,   0.,
+                 0.,   0.,   0.,   1.,
+            ]
+        }
+    }
+
+    pub fn rotation_z_rads(theta: f64) -> Self {
+        let (sin, cos) = theta.sin_cos();
+        
+        Mat4 {
+            vals: [
+                cos, -sin,  0.,   0.,
+                sin,  cos,  0.,   0.,
+                0.,   0.,   1.,   0.,
+                0.,   0.,   0.,   1.,
             ]
         }
     }

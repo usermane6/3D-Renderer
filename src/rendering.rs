@@ -80,19 +80,19 @@ pub struct RenderData {
 
 pub fn run_loop<'a, F, G>(mut renderer: Renderer, event_loop: EventLoop<()>, on_start: F, update: G) 
     where 
-    F: Fn(&mut Scene) + 'static,
-    G: Fn(&mut Scene) + 'static 
+    F: Fn(&mut Scene, RenderData) + 'static,
+    G: Fn(&mut Scene, RenderData) + 'static 
 {
     let mut render_data = RenderData { 
         total_updates: 0,
     };
 
-    on_start(&mut renderer.scene);
+    on_start(&mut renderer.scene, render_data);
 
     event_loop.run(move |event, _, control_flow| {
         if let Event::RedrawRequested(_) = event {
             // redraw has been requeated => get new state => update pixel buffer
-            update(&mut renderer.scene);
+            update(&mut renderer.scene, render_data);
             renderer.update_buffer(renderer.scene.get_state());
             render_data.total_updates += 1;
             
