@@ -95,7 +95,6 @@ pub fn run_loop<'a, F, G>(mut renderer: Renderer, event_loop: EventLoop<()>, on_
             update(&mut renderer.scene, render_data);
             renderer.update_buffer(renderer.scene.get_state());
             render_data.total_updates += 1;
-            
             // panic!();
             if let Err(_err) = renderer.render() {
                 *control_flow = ControlFlow::Exit;

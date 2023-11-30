@@ -1,5 +1,5 @@
 use std::fmt;
-use::std::ops::{Add, Sub, Mul};
+use::std::ops::{Add, Sub, Mul, AddAssign, SubAssign, MulAssign};
 
 use super::traits::VecMath;
 use super::vec2::Vec2;
@@ -37,6 +37,12 @@ impl Add<&Vec4> for &Vec4 {
     }
 }
 
+impl AddAssign for Vec4 {
+    fn add_assign(&mut self, other: Self) {
+        *self = *self + other;
+    }
+}
+
 impl Sub for Vec4 {
     type Output = Vec4;
 
@@ -58,6 +64,12 @@ impl Sub<&Vec4> for &Vec4 {
     }
 }
 
+impl SubAssign for Vec4 {
+    fn sub_assign(&mut self, other: Self) {
+        *self = *self - other;
+    }
+}
+
 impl Mul<f64> for Vec4 {
     type Output = Vec4;
 
@@ -76,6 +88,12 @@ impl Mul<&f64> for Vec4 {
             z: self.z * scalar,
             w: self.w * scalar,
         }
+    }
+}
+
+impl MulAssign<f64> for Vec4 {
+    fn mul_assign(&mut self, other: f64) {
+        *self = *self * other;
     }
 }
 

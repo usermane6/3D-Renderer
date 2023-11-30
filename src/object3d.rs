@@ -1,3 +1,6 @@
+use std::{fs::File, io::BufReader};
+use std::io::BufRead;
+
 use crate::math::{tri3d::Tri3d, transform3d::{Transform3d, self}, mat4::Mat4, vec4::Vec4, color::{Color, Colors}};
 
 #[derive(Debug, Clone)]
@@ -36,5 +39,61 @@ impl Object3d {
         ];
 
         Object3d { key: 0, transform: Transform3d::new_empty(), mesh }
+    }
+
+    pub fn model_from_file(path: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        // println!("{}", std::env::current_dir()?.display());
+        let file = File::open(path).expect("could not read file");
+        let reader = BufReader::new(file);
+
+        let mut vertices: Vec<Vec4> = vec![];
+        let mut mesh: Vec<Tri3d> = vec![];
+
+        for line in reader.lines() { // loop through all lines in the fie
+            let slice: &str = &line?[..];
+            // print!("{} ", slice.chars().next().unwrap());
+
+            if slice.starts_with("v ") { // if this is the definition of a vertex
+                let split: Vec<&str> = slice.split(" ").collect();
+                // println!("{:?}", split);
+
+                vertices.push(
+                    Vec4::new(
+                        split[1].parse::<f64>().unwrap(), 
+                        split[2].parse::<f64>().unwrap(), 
+                        split[3].parse::<f64>().unwrap(), 
+                        1.
+                    )
+                )
+            }
+
+            if slice.starts_with("f ") { // if this is a face
+
+                // f v1/vn1/vt1 v2/vn2/vt2 v3/vn3/vt3
+                let split = slice.trim_matches('f')
+                                                    .trim()
+                                                    .split(" ")
+                                                    .collect::<Vec<&str>>();
+                // ["v1/vn1/vt1", "v2/vn2/vt2", v3/vn3/vt3]
+
+                let mut tri_vertices = [Vec4::zero(); 3];
+
+                for (i, vertex_data) in split.iter().enumerate() {
+                    let v_id = vertex_data.split("/")
+                                                    .next()
+                                                    .unwrap()
+                                                    .parse::<usize>()
+                                                    .unwrap(); 
+
+                    tri_vertices[i] = vertices[v_id - 1]; //  -1 becauee vids start at 1
+                }
+
+                mesh.push( Tri3d::new(tri_vertices, Color::gray(255)) );
+            }   
+        }
+
+        Ok(
+            Object3d { key: 1, transform: Transform3d::new_empty(), mesh }
+        )
     }
 }

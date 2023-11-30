@@ -2,7 +2,7 @@ use crate::math::traits::VecMath;
 use crate::math::vec2::Vec2;
 
 use std::fmt;
-use::std::ops::{Add, Sub, Mul};
+use::std::ops::{Add, Sub, Mul, AddAssign, SubAssign, MulAssign};
 
 
 #[derive(Debug, Clone, Copy)]
@@ -32,6 +32,12 @@ impl Add<&Vec3> for &Vec3 {
     }
 }
 
+impl AddAssign for Vec3 {
+    fn add_assign(&mut self, other: Self) {
+        *self = *self + other;
+    }
+}
+
 impl Sub for Vec3 {
     type Output = Vec3;
 
@@ -52,6 +58,12 @@ impl Sub<&Vec3> for &Vec3 {
     }
 }
 
+impl SubAssign for Vec3 {
+    fn sub_assign(&mut self, other: Self) {
+        *self = *self - other;
+    }
+}
+
 impl Mul<f64> for Vec3 {
     type Output = Vec3;
 
@@ -69,6 +81,12 @@ impl Mul<&f64> for Vec3 {
             y: self.y * scalar,
             z: self.z * scalar,
         }
+    }
+}
+
+impl MulAssign<f64> for Vec3 {
+    fn mul_assign(&mut self, other: f64) {
+        *self = *self * other;
     }
 }
 
