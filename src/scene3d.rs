@@ -13,7 +13,8 @@ impl Viewport {
         Viewport {w, h, d}
     }
 
-    pub fn project_onto(&self, p: &Vec3) -> Vec3 {
+    pub fn _project_onto(&self, p: &Vec3) -> Vec3 {
+        // deprecated, functionality is now handled with a matrix
         Vec3 { 
             x: ( p.x * self.d ) / p.z, 
             y: ( p.y * self.d ) / p.z, 
@@ -23,6 +24,30 @@ impl Viewport {
 
     pub fn projection_mat(self) -> Mat4 {
         Mat4::projection(self.d)
+    }
+}
+
+// a plane is defined by the equation:
+// Ax + By + Cz + D = 0
+// or 
+// N⋅P + D = 0
+// where 
+// N = (A, B, C)
+// P = (x, y, z)
+pub struct ClippingPlane {
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
+}
+
+impl ClippingPlane {
+    pub fn new(a: f64, b: f64, c: f64, d: f64) -> Self {
+        ClippingPlane { a, b, c, d }
+    }
+
+    pub fn clip_point(&self, p: Vec4) {
+        if ( self.a * p.x ) + ( self.b * p.y ) + ( self.c * p.z ) + self.d >= 0. {}
     }
 }
 
@@ -82,7 +107,8 @@ impl Scene {
         assert_ne!(projected_mesh.len(), 0);
 
         for tri in projected_mesh {
-            drawing::tri_wireframe(&mut s, &tri, &tri.color);
+            drawing::tri_wireframe(&mut s, &tri, &Color::new_color(Colors::GREEN));
+            // drawing::tri_filled(&mut s, &tri, &tri.color);
         }
         s
     }
@@ -91,24 +117,23 @@ impl Scene {
         let mut mesh: Vec<Tri2d> = vec![];
 
         for (id, object) in self.objects.iter().enumerate() {
-
             let transform = self.object_mat(id);
-            // panic!("transform: {transform}");
             for tri in object.mesh.iter() {
                 let tri_new = tri.apply_transform(transform);
                 let a: Vec2 = Vec2::new(self.state_size.0 as f64 / 2., self.state_size.0 as f64 / 2.);
-                // panic!("\n{}, \n{}, \n{}, \n{}", tri[0], tri_new[0], a, transform);
+                
                 let mut points: [Vec2; 3] = [
                     tri_new[0].into(),
                     tri_new[1].into(),
                     tri_new[2].into(),
                 ];
+
                 points = [
                     points[0] + a,
                     points[1] + a,
                     points[2] + a,
                 ];
-                // println!("{:?}", points);
+                
                 mesh.push(Tri2d::new(points, tri.color));
             }
         }
@@ -116,10 +141,10 @@ impl Scene {
         mesh
     }
 
-    /// gets the transformation 
+    /// gets the transformation matrix of a given object
     fn object_mat(&self, id: usize) -> Mat4 {
         if let Some(object) = self.objects.get(id) { 
-            // gathers all the transformationsacting on an onject and composites them.
+            // gathers all the transformations acting on an onject and composites them.
             let trans = object.transform.translation_mat() * self.global_transform.translation_mat();
             let rot = object.transform.rotation_mat() * self.global_transform.rotation_mat();
             let scale = object.transform.scale_mat() * self.global_transform.scale_mat();
@@ -128,11 +153,6 @@ impl Scene {
             let onto2d = self.onto_2d_mat();
             let fix_to_center = self.fix_to_center_mat();
 
-            // panic!("\nfix: \n{}\nonto: \n{}\nproj: \n{}\ntrans: \n{}\nrot: \n{}\nscale: \n{}", fix_to_center, onto2d, projection, trans, rot, scale);
-
-            // println!("{projection}");
-            // panic!();
-
             // return fix_to_center * (onto2d * projection * trans * rot * scale)
             return onto2d * projection * trans * rot * scale
          } else {
@@ -140,8 +160,9 @@ impl Scene {
          }
     }
 
-    fn project_onto_2d(&self, p: &Vec3) -> Vec2 {
-        let projected = self.viewport.project_onto(p);
+    fn _project_onto_2d(&self, p: &Vec3) -> Vec2 {
+        // deprecated, functionality handled through matrices
+        let projected = self.viewport._project_onto(p);
 
         Vec2 {
             x: ((projected.x * self.state_size.0 as f64) / self.viewport.w) + (self.state_size.0 as f64 / 2.),
@@ -162,8 +183,4 @@ impl Scene {
         println!("added object to scene!");
         self.objects.push(object);
     }
-
-    // pub fn append_mesh(&mut self, mesh: &mut Vec<Tri3d>) {
-    //     self.mesh.append(mesh);
-    // }
 }

@@ -5,8 +5,6 @@ use super::traits::VecMath;
 use super::vec2::Vec2;
 use super::vec3::Vec3;
 
-// // TODO add from trait from Vec3
-
 // used for homogeneous coordinates in 3d space
 #[derive(Debug, Clone, Copy)]
 pub struct Vec4 {

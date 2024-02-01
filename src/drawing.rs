@@ -2,10 +2,7 @@ use crate::math::color::Color;
 use crate::state2d::State;
 use crate::math::{vec2::Vec2, tri2d::Tri2d};
 
-// TODO: have drawing functions return states, rather than modify them
-// TODO TODO: cleanup
-// // TODO: use color as a param 
-
+#[allow(unused)]
 pub fn bar(s: &mut State, y: &usize, start_x: &usize, end_x: &usize, color: &Color) {
     for id in (y*s.width() + start_x)..(y*s.width() + end_x) {
         s.put_pixel_id(id, &color)
@@ -38,7 +35,7 @@ fn x_values(start: Vec2, end: Vec2) -> Vec<usize> {
 
 fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
     // swap a/b depending on which point is farther on the x axis
-    let (mut start, mut end) = if a.x > b.x { (b, a) } else { (a, b) };
+    let (start, end) = if a.x > b.x { (b, a) } else { (a, b) };
     
     let ys = y_values(start, end);
 
@@ -49,7 +46,7 @@ fn line_gradual(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
 
 fn line_steep(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
     // swap a/b depending on which point is farther on the x axis
-    let (mut start, mut end) = if a.y > b.y { (b, a) } else { (a, b) };
+    let (start, end) = if a.y > b.y { (b, a) } else { (a, b) };
 
     let xs = x_values(start, end);
 
@@ -68,14 +65,13 @@ pub fn line(s: &mut State, a: Vec2, b: Vec2, color: &Color) {
     }
 }
 
-
-pub fn tri_wireframe(s: &mut State, tri: &Tri2d, color: &Color) 
-{
+pub fn tri_wireframe(s: &mut State, tri: &Tri2d, color: &Color) {
     line(s, tri[0], tri[1], color);
     line(s, tri[1], tri[2], color);
     line(s, tri[2], tri[0], color);
 }
 
+#[allow(unused)]
 pub fn tri_filled(s: &mut State, tri: &Tri2d, color: &Color) {
     //! god strike me down i cant do this anymore
     let mut height_order = [tri[0], tri[1], tri[2]];
@@ -88,7 +84,7 @@ pub fn tri_filled(s: &mut State, tri: &Tri2d, color: &Color) {
     let x_012 = {
         let mut x_01 = x_values(height_order[0], height_order[1]);
         let mut x_12 = x_values(height_order[1], height_order[2]);
-        x_01.pop();
+        // x_01.pop();
         x_01.append(&mut x_12);
         x_01
     };
@@ -96,21 +92,21 @@ pub fn tri_filled(s: &mut State, tri: &Tri2d, color: &Color) {
 
     let is_mid_left =  height_order[1].x < height_order[2].x;
 
-    if height_order[2].y <= 0. {return;}
+    if height_order[2].y <= 0. {return}
 
     if is_mid_left {
-        for y in height_order[0].y as usize..(height_order[2].y as usize - 1) {
+        for y in height_order[0].y as usize..=(height_order[2].y as usize - 1) {
             let i = y - height_order[0].y  as usize;
             // print!("{} ", i);
-            for x in x_012[i]..x_02[i] {
+            for x in x_012[i]..=x_02[i] {
                 s.put_pixel_xy(x, y, color)
             }
         }
     } else {
-        for y in height_order[0].y as usize..(height_order[2].y as usize - 1) {
+        for y in height_order[0].y as usize..=(height_order[2].y as usize - 1) {
             let i = y - height_order[0].y  as usize;
             // print!("{} ", i);
-            for x in x_02[i]..x_012[i] {
+            for x in x_02[i]..=x_012[i] {
                 s.put_pixel_xy(x, y, color)
             }
         }

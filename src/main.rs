@@ -1,10 +1,9 @@
 // #![allow(unused_imports)]
-use math::{vec2::Vec2, vec3::Vec3, traits::VecMath, mat4::Mat4, vec4::Vec4};
+use math::{vec3::Vec3, vec4::Vec4};
 use object3d::Object3d;
 // use object3d::Cube;
 use rendering::RenderData;
 use scene3d::Scene;
-use state2d::State;
 use winit::event_loop::EventLoop;
 
 mod rendering;
@@ -17,14 +16,18 @@ mod object3d;
 const WIDTH:  u32 = 800;
 const HEIGHT: u32 = 800;
 
-// TODO: impl addassign to all vector classes
 fn on_start(scene: &mut Scene, _: RenderData) {
-    
+    let mut object = Object3d::plane();
+
+    object.transform.translation = Vec4::new(0., 0., 10., 1.);
+    object.transform.rotation += Vec3::new(0., 0.1, 0.1);
+
+    scene.add_object(object);
 }
 
-fn update(scene: &mut Scene, render_data: RenderData) {
+fn update(scene: &mut Scene, _render_data: RenderData) {
     if let Some(object) = scene.objects.get_mut(0) {
-        
+        object.transform.rotation += Vec3::new(0., 0.02, 0.);
     }
 }
 

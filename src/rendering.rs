@@ -60,7 +60,7 @@ impl Renderer {
     }
 
     pub fn update_buffer(&mut self, state: State) {
-        //todo: make this not sloppy
+    //     // todo: make this not sloppy 
         let zipped = self.pixels.frame_mut().iter_mut().zip(state.pixels);
         for (frame_p, state_p) in zipped { 
             if *frame_p == state_p {continue;}
