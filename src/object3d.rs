@@ -1,10 +1,24 @@
 use std::{fs::File, io::BufReader};
 use std::io::BufRead;
 
+use crate::math::vec3::Vec3;
 use crate::math::{tri3d::Tri3d, transform3d::{Transform3d, self}, mat4::Mat4, vec4::Vec4, color::{Color, Colors}};
+
+pub struct BoundingSphere {
+    center: Vec3,
+    radius: f64,
+}
+
+impl BoundingSphere {
+    // the algorithim by Jack Ritter as defined by 
+    // https://en.wikipedia.org/wiki/Bounding_sphere
+    pub fn ritter( mesh: Vec<Tri3d> ) -> Self { todo!() }
+}
+
 
 #[derive(Debug, Clone)]
 pub struct Object3d {
+    // todo add bounding sphere
     pub key: u32,
     pub transform: Transform3d,
     pub mesh: Vec<Tri3d>,

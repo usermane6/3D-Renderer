@@ -10,7 +10,7 @@ pub struct Viewport {
 
 impl Viewport {
     pub fn new(w: f64, h:f64, d:f64) -> Self{
-        Viewport {w, h, d}
+        Viewport { w, h, d }
     }
 
     pub fn _project_onto(&self, p: &Vec3) -> Vec3 {
@@ -46,8 +46,17 @@ impl ClippingPlane {
         ClippingPlane { a, b, c, d }
     }
 
-    pub fn clip_point(&self, p: Vec4) {
-        if ( self.a * p.x ) + ( self.b * p.y ) + ( self.c * p.z ) + self.d >= 0. {}
+    pub fn new_normal(n: Vec3, d:f64) -> Self {
+        ClippingPlane::new(
+            n.x, 
+            n.y, 
+            n.z, 
+            d
+        )
+    }
+
+    pub fn clip_point(&self, p: Vec4) -> bool {
+        ( self.a * p.x ) + ( self.b * p.y ) + ( self.c * p.z ) + self.d >= 0.
     }
 }
 
@@ -55,19 +64,33 @@ pub struct Scene {
     viewport: Viewport,
     state_size: (usize, usize),
     pub global_transform: Transform3d,
+    clipping_planes: Vec<ClippingPlane>,
     pub objects: Vec<Object3d>,
 }
 
 impl Scene {
-    pub fn new(viewport: Viewport, state_size: (usize, usize), global_transform: Transform3d, objects: Vec<Object3d>) -> Self {
-        Scene { viewport, state_size, global_transform, objects}
+    pub fn new(viewport: Viewport, state_size: (usize, usize), global_transform: Transform3d, clipping_planes: Vec<ClippingPlane>, objects: Vec<Object3d>) -> Self {
+        Scene { viewport, state_size, global_transform, clipping_planes, objects }
     }
 
     pub fn new_empty(state_size: (usize, usize)) -> Self {
+        let viewport = Viewport::new(1., 1., 1.);
+        
+        // create clipping planes
+        const OORT: f64 = 0.70710678; // one over root two
+        let clipping_planes = vec![
+            ClippingPlane::new(0., 0., 1., viewport.d), // near
+            ClippingPlane::new(OORT, 0., OORT, 0.),     // left
+            ClippingPlane::new(-OORT, 0., OORT, 0.),    // right
+            ClippingPlane::new(0., OORT, OORT, 0.),     // bottom
+            ClippingPlane::new(0., -OORT, OORT, 0.),    // top
+        ];
+
         Scene { 
-            viewport: Viewport::new(1., 1., 1.), 
-            state_size: state_size, 
+            viewport, 
+            state_size, 
             global_transform: Transform3d::new_empty(),
+            clipping_planes,
             objects: vec![] 
         }
     }

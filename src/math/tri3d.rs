@@ -1,5 +1,5 @@
-use std::ops::Index;
-use super::{vec2::Vec2, vec4::Vec4, color::Color, mat4::Mat4, tri2d::Tri2d};
+use std::{collections::HashSet, ops::Index};
+use super::{color::Color, mat4::Mat4, tri2d::Tri2d, vec2::Vec2, vec4::{Vec4, Vec4Hash}};
 
 /// each point on the triangle is a homogeneous coordinate 
 #[derive(Debug, Clone, Copy)]
@@ -41,4 +41,25 @@ impl Index<usize> for Tri3d {
     fn index(&self, index: usize) -> &Self::Output {
         &self.points[index]
     }
+}
+
+type Mesh = Vec<Tri3d>;
+
+pub fn points_from_mesh(mesh: &Mesh) -> Vec<Vec4> {
+    //todo make this work
+    let mut points: Vec<Vec4Hash> = vec![];
+    let _ = mesh.into_iter()
+        .map(|tri| 
+            points.append(&mut tri.points.to_vec()
+                .into_iter()
+                .map(|point| point.into())
+                .collect()
+            )
+        );
+
+    points.into_iter()
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .map(|hashed| hashed.into())
+        .collect() 
 }

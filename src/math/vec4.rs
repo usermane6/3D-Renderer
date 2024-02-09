@@ -167,3 +167,33 @@ impl VecMath for Vec4 {
         self + &((other - self) * t)
     }
 }
+
+// implentation of hashing for vectors
+// since vec4 contains only floating point values, 
+// it cannot be used for hashing
+// and since hashing is an easy way to get all the unique points of a set,
+// it can be used to get all unique points in a mesh of tris
+#[derive(Hash, PartialEq, Eq)]
+pub struct Vec4Hash(u64, u64, u64, u64);
+
+impl From<Vec4> for Vec4Hash {
+    fn from(value: Vec4) -> Self {
+        Vec4Hash(
+            value.x.to_bits(),
+            value.y.to_bits(),
+            value.z.to_bits(),
+            value.w.to_bits(),   
+        )
+    }
+}
+
+impl From<Vec4Hash> for Vec4 {
+    fn from(value: Vec4Hash) -> Self {
+        Vec4 { 
+            x: f64::from_bits(value.0),
+            y: f64::from_bits(value.1),
+            z: f64::from_bits(value.2),
+            w: f64::from_bits(value.3),   
+        }
+    }
+}
