@@ -1,3 +1,4 @@
+#[allow(unused)]
 pub enum Colors {
     RED,
     GREEN,
@@ -31,12 +32,12 @@ impl Color {
             Colors::RED =>     Color::new(0xff, 0x00, 0x00),
             Colors::GREEN =>   Color::new(0x00, 0xff, 0x00),
             Colors::BLUE =>    Color::new(0x00, 0x00, 0xff),
-            Colors::BLACK =>   Color::new(0x00, 0x00, 0x00),
             Colors::MAGENTA => Color::new(0xff, 0x00, 0xff),
             Colors::CYAN =>    Color::new(0x00, 0xff, 0xff),
             Colors::YELLOW =>  Color::new(0xff, 0xff, 0x00),
             Colors::WHITE =>   Color::new(0xff, 0xff, 0xff),
-            _             =>   Color::new(0x00, 0x00, 0x00)
+            Colors::BLACK =>   Color::new(0x00, 0x00, 0x00),
+            // _             =>   Color::new(0x00, 0x00, 0x00)
         }
     }
 

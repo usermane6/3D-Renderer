@@ -13,15 +13,6 @@ impl Viewport {
         Viewport { w, h, d }
     }
 
-    pub fn _project_onto(&self, p: &Vec3) -> Vec3 {
-        // deprecated, functionality is now handled with a matrix
-        Vec3 { 
-            x: ( p.x * self.d ) / p.z, 
-            y: ( p.y * self.d ) / p.z, 
-            z: self.d
-        }
-    }
-
     pub fn projection_mat(self) -> Mat4 {
         Mat4::projection(self.d)
     }
@@ -95,34 +86,6 @@ impl Scene {
         }
     }
 
-    // pub fn get_state(&self) -> State{
-    //     let mut s = State::new_fill(self.state_size, Color::new_color(Colors::BLACK));
-
-    //     // let projected_mesh = self.project_mesh();
-
-    //     // print!("drawing");
-    //     for tri in projected_mesh {
-    //         // print!("{:?} ", tri);
-    //         drawing::tri_wireframe(&mut s, &tri, &Color::new_color(Colors::BLUE));
-    //     }
-
-    //     s
-    // }
-
-    // fn project_mesh(&self) -> Vec<Tri2d> {
-    //     let mut projected_tris = vec![];
-
-    //     for tri in self.mesh.iter() {
-    //         projected_tris.push([
-    //             self.project_onto_2d(tri[0]),
-    //             self.project_onto_2d(tri[1]),
-    //             self.project_onto_2d(c),
-    //         ])
-    //     }
-
-    //     projected_tris
-    // }
-
     pub fn get_state(&self) -> State {
         let projected_mesh = self.projected_mesh();
         let mut s = State::new_fill(self.state_size, Color::gray(0x00));
@@ -143,6 +106,8 @@ impl Scene {
             let transform = self.object_mat(id);
             for tri in object.mesh.iter() {
                 let tri_new = tri.apply_transform(transform);
+                //TODO: clip tris here -----------------------------------
+
                 let a: Vec2 = Vec2::new(self.state_size.0 as f64 / 2., self.state_size.0 as f64 / 2.);
                 
                 let mut points: [Vec2; 3] = [
@@ -174,7 +139,7 @@ impl Scene {
 
             let projection = self.viewport.projection_mat();
             let onto2d = self.onto_2d_mat();
-            let fix_to_center = self.fix_to_center_mat();
+            let _fix_to_center = self.fix_to_center_mat();
 
             // return fix_to_center * (onto2d * projection * trans * rot * scale)
             return onto2d * projection * trans * rot * scale
@@ -183,18 +148,8 @@ impl Scene {
          }
     }
 
-    fn _project_onto_2d(&self, p: &Vec3) -> Vec2 {
-        // deprecated, functionality handled through matrices
-        let projected = self.viewport._project_onto(p);
-
-        Vec2 {
-            x: ((projected.x * self.state_size.0 as f64) / self.viewport.w) + (self.state_size.0 as f64 / 2.),
-            y: ((projected.y * self.state_size.1 as f64) / self.viewport.h) + (self.state_size.1 as f64 / 2.),
-        }
-    }
-
     pub fn onto_2d_mat(&self) -> Mat4 {
-        //todo do not forget to add half the screen size to adjust the center of screen
+        //! do not forget to add half the screen size to adjust the center of screen
         Mat4::onto_2d(self.viewport.w, self.viewport.h, self.state_size.0 as f64, self.state_size.1 as f64)
     }
 

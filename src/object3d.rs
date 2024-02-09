@@ -1,6 +1,7 @@
 use std::{fs::File, io::BufReader};
 use std::io::BufRead;
 
+use crate::math::tri3d::Mesh;
 use crate::math::vec3::Vec3;
 use crate::math::{tri3d::Tri3d, transform3d::{Transform3d, self}, mat4::Mat4, vec4::Vec4, color::{Color, Colors}};
 
@@ -12,7 +13,7 @@ pub struct BoundingSphere {
 impl BoundingSphere {
     // the algorithim by Jack Ritter as defined by 
     // https://en.wikipedia.org/wiki/Bounding_sphere
-    pub fn ritter( mesh: Vec<Tri3d> ) -> Self { todo!() }
+    pub fn ritter( mesh: &Mesh ) -> Self { todo!() }
 }
 
 
@@ -71,6 +72,7 @@ impl Object3d {
         Object3d { key: 1, transform: Transform3d::new_empty(), mesh }
     }
 
+    // TODO: have this just return Ok or Err, none of this "Box" crap - or at least figure out why
     pub fn model_from_file(path: &str) -> Result<Self, Box<dyn std::error::Error>> {
         // println!("{}", std::env::current_dir()?.display());
         let file = File::open(path).expect("could not read file");

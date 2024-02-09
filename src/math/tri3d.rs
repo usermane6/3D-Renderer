@@ -43,10 +43,10 @@ impl Index<usize> for Tri3d {
     }
 }
 
-type Mesh = Vec<Tri3d>;
+pub type Mesh = Vec<Tri3d>;
 
 pub fn points_from_mesh(mesh: &Mesh) -> Vec<Vec4> {
-    //todo make this work
+    //this is kinda gross but whatevs
     let mut points: Vec<Vec4Hash> = vec![];
     let _ = mesh.into_iter()
         .map(|tri| 
